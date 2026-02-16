@@ -22,3 +22,6 @@
 ## Update (2026-03-02T09:47:35)
 - feat: add support for pagination in API
 
+## Update (2026-02-16T09:47:35)
+- feat: implement caching for frequent queries
+
