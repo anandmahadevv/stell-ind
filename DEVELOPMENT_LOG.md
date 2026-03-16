@@ -16,3 +16,6 @@
 ## Update (2026-03-30T09:47:35)
 - docs: update API endpoints documentation
 
+## Update (2026-03-16T09:47:35)
+- docs: update API endpoints documentation
+
