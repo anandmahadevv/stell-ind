@@ -13,3 +13,6 @@
 ## Update (2026-04-13T09:47:34)
 - perf: reduce memory footprint in background workers
 
+## Update (2026-03-30T09:47:35)
+- docs: update API endpoints documentation
+
