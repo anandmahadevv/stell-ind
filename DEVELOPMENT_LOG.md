@@ -10,3 +10,6 @@
 ## Update (2026-04-27T09:47:34)
 - test: improve coverage for core logic
 
+## Update (2026-04-13T09:47:34)
+- perf: reduce memory footprint in background workers
+
