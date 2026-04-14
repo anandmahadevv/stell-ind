@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  companyId String   @unique
+  username  String   @unique
+  password  String
+  role      String   // OWNER, CUSTOMER, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company?
+}
+
+model Company {
+  id                   String   @id @default(uuid())
+  userId               String   @unique
+  name                 String
+  logoUrl              String?
+  companyType          String
+  manufacturingCategory String
+  gstNumber            String?
+  msmeNumber           String?
+  cinNumber            String?
+  factoryLicenseNumber String?
+  yearEstablished      Int?
+  numberOfEmployees    Int?
+  
+  // Location
+  address              String?
+  area                 String?
+  city                 String?
+  state                String?
+  pincode              String?
+  googleMapsUrl        String?
+  
+  // Contact
+  contactPerson        String?
+  designation          String?
+  mobileNumber         String?
+  altMobileNumber      String?
+  email                String?
+  website              String?
+  
+  // Rating
+  rating               Float    @default(0)
+  reviewCount          Int      @default(0)
+  
+  isVerified           Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  
+  user                 User     @relation(fields: [userId], references: [id])
+  machines             Machine[]
+  bookingsMade         Booking[] @relation("CustomerBookings")
+}
+
+model Machine {
+  id                String   @id @default(uuid())
+  companyId         String
+  name              String
+  category          String
+  manufacturer      String
+  modelNumber       String
+  serialNumber      String?
+  purchaseYear      Int?
+  photos            String   // Stored as JSON string
+  videos            String   // Stored as JSON string
+  condition         String
+  
+  // Tech Specs
+  workingArea       String?
+  maxSize           String?
+  materialCompatibility String?
+  accuracy          String?
+  tolerance         String?
+  maxLoad           String?
+  spindleSpeed      String?
+  
+  // Pricing
+  hourlyRate        Float
+  
+  status            String   @default("AVAILABLE") // AVAILABLE, RESERVED, BOOKED, UNDER_MAINTENANCE, OUT_OF_SERVICE
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  company           Company  @relation(fields: [companyId], references: [id])
+  bookings          Booking[]
+  maintenanceLogs   MaintenanceLog[]
+}
+
+model Booking {
+  id                String   @id @default(uuid())
+  machineId         String
+  customerId        String
+  
+  // Requirements
+  productName       String
+  productDescription String
+  materialType      String
+  quantityRequired  Int
+  deliveryDate      DateTime
+  files             String   // Stored as JSON string
+  
+  // Schedule
+  startDate         DateTime
+  endDate           DateTime
+  slots             String   // Stored as JSON string
+  
+  status            String   @default("PENDING") // PENDING, APPROVED, REJECTED, CLARIFICATION_NEEDED, ACTIVE, COMPLETED
+  totalPrice        Float
+  
+  // Agreement
+  agreementUrl      String?
+  isSignedByOwner   Boolean  @default(false)
+  isSignedByCustomer Boolean  @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  machine           Machine  @relation(fields: [machineId], references: [id])
+  customer          Company  @relation("CustomerBookings", fields: [customerId], references: [id])
+}
+
+model MaintenanceLog {
+  id                String   @id @default(uuid())
+  machineId         String
+  type              String   // Preventive, Calibration, Breakdown, Repair
+  description       String
+  startDate         DateTime
+  expectedReturnDate DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  machine           Machine  @relation(fields: [machineId], references: [id])
+}
