@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-darkBlue text-lightGrey antialiased;
+  }
+}
+
+@layer utilities {
+  .glassmorphism {
+    @apply bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg border border-white border-opacity-10;
+  }
+  
+  .premium-gradient {
+    @apply bg-gradient-to-r from-accent to-blue-500 text-transparent bg-clip-text;
+  }
+}
+
+/* Micro-animations */
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(100, 255, 218, 0.2), 0 8px 10px -6px rgba(100, 255, 218, 0.1);
+}
